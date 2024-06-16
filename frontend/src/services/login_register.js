@@ -3,7 +3,8 @@ import axios from 'axios';
 
 
 const axiosAuth = axios.create({
-    baseURL: 'http://127.0.0.1:8000/api/',
+    //SI POR ALGUNA RAZON NO SALE PRUEBA CON EL MIN56 DEL VIDEO Y EL NO CHAPO TU /API/
+    baseURL: import.meta.env.VITE_API_URL,
  });
 
 
