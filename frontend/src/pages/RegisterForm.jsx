@@ -24,7 +24,7 @@ export const RegistrarForm = () => {
   return (
     <div className="flex items-center justify-center min-h-screen ">
       <Toaster />
-      <div className="bg-orange-400 p-8 rounded-lg shadow-lg max-w-md w-full">
+      <div className="bg-slate-300 p-8 rounded-lg shadow-lg max-w-md w-full">
         <h2 className="text-2xl font-bold mb-6 text-gray-900">Registrar Usuarios</h2>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-4">

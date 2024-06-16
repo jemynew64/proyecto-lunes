@@ -1,22 +1,39 @@
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { Form_login } from './components/Form_login.jsx';
-import { Navigation } from './components/Navigation.jsx';
+// import { Navigation } from './components/Navigation.jsx';
 import { ProtectedRoute } from "./components/ProtectedRoute.jsx";
 import { useAuthStore } from "./store/auth.js";
 import { Admin } from "./pages/Admin.jsx";
 import { Usuario } from "./pages/Usuario.jsx";
 import { RegistrarForm } from "./pages/RegisterForm.jsx";
+import Sidebar, { SidebarItem } from "./components/Sidebar";
+import { LayoutDashboard, PersonStanding } from "lucide-react";
 
 const App = () => {
   const location = useLocation();
   const isAuth = useAuthStore(state => state.isAuth);
   const isPermissions = useAuthStore(state => state.userRole);
+  // en el caso que sea el login que no se muestre si vas a hacer un landing tiene que ser asi tambien 
+  if (location.pathname === '/login') {
+    return <Form_login />;
+  }
 
-
+  if (location.pathname === '/register') {
+    return <RegistrarForm />;
+  }
 
   return (
-    <>
-      {location.pathname !== '/login' && <Navigation />}
+    <div className="flex">
+      <Sidebar>
+        {/* Mostrar elementos del sidebar según el rol del usuario */}
+        {isPermissions === "administrador" && (
+          <SidebarItem icon={<PersonStanding size={20} />} text="admin" to="/admin" />
+        )}
+        {isAuth && (
+          <SidebarItem icon={<LayoutDashboard size={20} />} text="usuario" to="/usuario" />
+        )}
+      </Sidebar>
+      <main className="flex-1 p-4">
       <Routes>
         <Route path="/" element={<Navigate to="/login" />} />
         <Route path="/login" element={<Form_login />} />
@@ -34,7 +51,8 @@ const App = () => {
         {/* Redirigir a la página usuario si no existe lo cambiariamos a nuestra landing */}
         <Route path="*" element={<Navigate to="/usuario" />} />
       </Routes>
-    </>
+      </main>
+    </div>
   );
 }
 
