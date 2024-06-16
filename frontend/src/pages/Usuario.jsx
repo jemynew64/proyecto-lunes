@@ -1,6 +1,3 @@
-
 export const Usuario = () => {
-  return (
-    <div>usuario</div>
-  )
-}
+  return <div>usuario</div>;
+};

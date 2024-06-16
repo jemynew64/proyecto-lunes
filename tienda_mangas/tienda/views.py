@@ -1,17 +1,21 @@
 from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .serializers import UserSerializer
-#para el status
+from .serializers import UserSerializer, AnimeSerializer, UserAnimeFavoritesSerializer 
+
+# para el status
 from rest_framework import status
-#para las acciones
+
+# para las acciones
 from rest_framework.decorators import action
-from .models import User
-#para permisos de quien puede verlo 
+from .models import User, Anime, UserAnimeFavorites
+
+# para permisos de quien puede verlo 
 from rest_framework.permissions import IsAuthenticated,IsAdminUser
-# pal crud
+
+# para crud
 from rest_framework import viewsets
-#agregado por mi como extra 
+# agregado por mi como extra 
 
 from rest_framework_simplejwt.tokens import RefreshToken
 #########
@@ -76,3 +80,14 @@ def register(request):
         }, status=status.HTTP_201_CREATED)
 
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class AnimeViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated, IsAdminUser]
+    queryset = Anime.objects.all()
+    serializer_class = AnimeSerializer
+
+class UserAnimeFavoritesViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated, IsAdminUser]
+    queryset = UserAnimeFavorites.objects.all()
+    serializer_class = UserAnimeFavoritesSerializer

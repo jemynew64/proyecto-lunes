@@ -66,3 +66,26 @@ class User(AbstractBaseUser):
     @property
     def is_staff(self):
         return self.is_admin
+    
+class Anime(models.Model):
+    idAnime = models.AutoField(primary_key=True)
+    title = models.CharField(max_length=45)
+    author = models.CharField(max_length=45)
+    pub_year = models.CharField(max_length=45)
+    description = models.TextField()
+    img_route = models.CharField(max_length=45)
+
+    class Meta:
+        db_table = "Anime"
+
+    def __str__(self):
+        return self.title
+
+class UserAnimeFavorites(models.Model):
+    idUsuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    idAnimes = models.ForeignKey(Anime, on_delete=models.CASCADE)
+    is_favorite = models.BooleanField()
+
+    class Meta:
+        db_table = 'UserAnimeFavorites'
+

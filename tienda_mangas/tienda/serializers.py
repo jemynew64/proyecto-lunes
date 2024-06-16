@@ -1,7 +1,7 @@
 # tienda/serializers.py
 
 from rest_framework import serializers
-from .models import User
+from .models import User, Anime, UserAnimeFavorites
 from django.contrib.auth.hashers import make_password
 
 class UserSerializer(serializers.ModelSerializer):
@@ -22,3 +22,14 @@ class UserSerializer(serializers.ModelSerializer):
         if 'password' in validated_data:
             validated_data['password'] = make_password(validated_data['password'])
         return super().update(instance, validated_data)
+
+class AnimeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Anime
+        fields = ['idAnime', 'title', 'author', 'pub_year', 'description', 'img_route']
+
+class UserAnimeFavoritesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserAnimeFavorites
+        fields = ['idUsuario', 'idAnimes', 'is_favorite']
+
