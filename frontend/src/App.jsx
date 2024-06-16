@@ -6,6 +6,7 @@ import { useAuthStore } from "./store/auth.js";
 import { Admin } from "./pages/Admin.jsx";
 import { Usuario } from "./pages/Usuario.jsx";
 import { RegistrarForm } from "./pages/RegisterForm.jsx";
+import {Example } from "./components/AnimeLanding.jsx";
 
 const App = () => {
   const location = useLocation();
@@ -18,7 +19,7 @@ const App = () => {
     <>
       {location.pathname !== '/login' && <Navigation />}
       <Routes>
-        <Route path="/" element={<Navigate to="/login" />} />
+        <Route path="/" element={<Navigate to="/home" />} />
         <Route path="/login" element={<Form_login />} />
         {/* Rutas sin protección */}
         <Route path="/register" element={<RegistrarForm />} />
@@ -33,6 +34,8 @@ const App = () => {
 
         {/* Redirigir a la página usuario si no existe lo cambiariamos a nuestra landing */}
         <Route path="*" element={<Navigate to="/usuario" />} />
+        {/* Probando mi landing home */}
+        <Route path="/home" element={<Example/>}/>
       </Routes>
     </>
   );
