@@ -6,8 +6,10 @@ import { useAuthStore } from "./store/auth.js";
 import { Admin } from "./pages/Admin.jsx";
 import { Usuario } from "./pages/Usuario.jsx";
 import { RegistrarForm } from "./pages/RegisterForm.jsx";
+import {Landing } from "./components/AnimeLanding.jsx";
 import Sidebar, { SidebarItem } from "./components/Sidebar";
 import { LayoutDashboard, PersonStanding } from "lucide-react";
+
 
 const App = () => {
   const location = useLocation();
@@ -20,6 +22,9 @@ const App = () => {
 
   if (location.pathname === '/register') {
     return <RegistrarForm />;
+  }
+  if (location.pathname === '/landing'){
+    return <Landing/>
   }
 
   return (
@@ -35,7 +40,7 @@ const App = () => {
       </Sidebar>
       <main className="flex-1 p-4">
       <Routes>
-        <Route path="/" element={<Navigate to="/login" />} />
+        <Route path="/" element={<Navigate to="/landing" />} />
         <Route path="/login" element={<Form_login />} />
         {/* Rutas sin protección */}
         <Route path="/register" element={<RegistrarForm />} />
@@ -47,9 +52,6 @@ const App = () => {
         <Route element={<ProtectedRoute isAllowed={!!isAuth} />}>
           <Route path="/usuario" element={<Usuario />} />
         </Route>
-
-        {/* Redirigir a la página usuario si no existe lo cambiariamos a nuestra landing */}
-        <Route path="*" element={<Navigate to="/usuario" />} />
       </Routes>
       </main>
     </div>
