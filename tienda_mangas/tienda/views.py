@@ -2,14 +2,14 @@ from django.shortcuts import render
 from rest_framework import generics
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .serializers import UserSerializer, AnimeSerializer, UserAnimeFavoritesSerializer , AnimePublicSerializer
+from .serializers import UserSerializer, AnimeSerializer, UserAnimeFavoritesSerializer , AnimePublicSerializer, CategorySerializer, AnimeCategoriesSerializer
 
 # para el status
 from rest_framework import status
 
 # para las acciones
 from rest_framework.decorators import action
-from .models import User, Anime, UserAnimeFavorites
+from .models import User, Anime, UserAnimeFavorites, Category, AnimeCategories
 
 # para permisos de quien puede verlo 
 from rest_framework.permissions import IsAuthenticated,IsAdminUser
@@ -93,7 +93,17 @@ class UserAnimeFavoritesViewSet(viewsets.ModelViewSet):
     queryset = UserAnimeFavorites.objects.all()
     serializer_class = UserAnimeFavoritesSerializer
     
-
 class AnimeListView(generics.ListAPIView):
     queryset = Anime.objects.all()
     serializer_class = AnimePublicSerializer
+
+class CategoryViewSet(viewsets.ModelViewSet):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+
+class AnimeCategoriesViewSet(viewsets.ModelViewSet):
+    queryset = AnimeCategories.objects.all()
+    serializer_class = AnimeCategoriesSerializer
+
+
+

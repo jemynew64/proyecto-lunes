@@ -1,7 +1,7 @@
 # tienda/serializers.py
 
 from rest_framework import serializers
-from .models import User, Anime, UserAnimeFavorites
+from .models import User, Anime, UserAnimeFavorites, Category, AnimeCategories
 from django.contrib.auth.hashers import make_password
 
 class UserSerializer(serializers.ModelSerializer):
@@ -37,4 +37,14 @@ class AnimePublicSerializer(serializers.ModelSerializer):
     class Meta:
         model = Anime
         fields = '__all__'
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ['idCategory','name','img_route']
+
+class AnimeCategoriesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AnimeCategories
+        fields = ['idAnime','idCategory']
 
