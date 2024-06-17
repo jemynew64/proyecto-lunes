@@ -71,7 +71,6 @@ def get_upload_to(instance, filename):
     return os.path.join('images', filename)
     
 class Anime(models.Model):
-    idAnime = models.AutoField(primary_key=True)
     title = models.CharField(max_length=45)
     author = models.CharField(max_length=45)
     pub_year = models.CharField(max_length=45)
@@ -96,9 +95,9 @@ class UserAnimeFavorites(models.Model):
         return self.title
     
 class Category(models.Model):
-    idCategory = models.AutoField(primary_key=True)
+    # idCategory = models.AutoField(primary_key=True)
     name = models.CharField(max_length=80)
-    img_route = models.CharField(max_length=200)
+    img_route = models.ImageField(upload_to=get_upload_to, blank=True, null=True)
 
     class Meta:
         db_table = 'Category'
@@ -112,3 +111,28 @@ class AnimeCategories(models.Model):
 
     class Meta:
         db_table = "AnimeCategories"
+
+class Subscription(models.Model):
+    # idSubscription = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=80)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    typeSubscription = models.CharField(max_length=45)
+
+    class Meta:
+        db_table = "Subscription"
+
+    def __str__(self):
+        return self.name
+    
+class UserSubscription(models.Model):
+    idUser = models.ForeignKey(User, on_delete=models.CASCADE)
+    idSubscription = models.ForeignKey(Subscription, on_delete=models.CASCADE)
+    subscriptionDate = models.DateTimeField()
+    terminationDate = models.DateTimeField()
+    activeStatus = models.BooleanField()
+
+    class Meta:
+        db_table = "UserSubscription"
+
+    def __str__(self):
+        return f"{self.user} - {self.subscription}"

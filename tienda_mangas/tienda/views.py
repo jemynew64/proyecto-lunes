@@ -2,14 +2,14 @@ from django.shortcuts import render
 from rest_framework import generics
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .serializers import UserSerializer, AnimeSerializer, UserAnimeFavoritesSerializer , AnimePublicSerializer, CategorySerializer, AnimeCategoriesSerializer
+from .serializers import UserSerializer, AnimeSerializer, UserAnimeFavoritesSerializer , AnimePublicSerializer, CategorySerializer, AnimeCategoriesSerializer, SubscriptionSerializer, UserSubscriptionSerializer
 
 # para el status
 from rest_framework import status
 
 # para las acciones
 from rest_framework.decorators import action
-from .models import User, Anime, UserAnimeFavorites, Category, AnimeCategories
+from .models import User, Anime, UserAnimeFavorites, Category, AnimeCategories, Subscription, UserSubscription
 
 # para permisos de quien puede verlo 
 from rest_framework.permissions import IsAuthenticated,IsAdminUser
@@ -88,6 +88,10 @@ class AnimeViewSet(viewsets.ModelViewSet):
     queryset = Anime.objects.all()
     serializer_class = AnimeSerializer
 
+    def post(self, request, *args, **kwargs):
+        print(request.data)  # Verifica qué datos se están recibiendo
+        return super().post(request, *args, **kwargs)
+
 class UserAnimeFavoritesViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, IsAdminUser]
     queryset = UserAnimeFavorites.objects.all()
@@ -104,6 +108,14 @@ class CategoryViewSet(viewsets.ModelViewSet):
 class AnimeCategoriesViewSet(viewsets.ModelViewSet):
     queryset = AnimeCategories.objects.all()
     serializer_class = AnimeCategoriesSerializer
+
+class SubscriptionViewSet(viewsets.ModelViewSet):
+    queryset = Subscription.objects.all()
+    serializer_class = SubscriptionSerializer
+
+class UserSubscriptionViewSet(viewsets.ModelViewSet):
+    queryset = UserSubscription.objects.all()
+    serializer_class = UserSubscriptionSerializer
 
 
 
