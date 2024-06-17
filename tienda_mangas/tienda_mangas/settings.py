@@ -78,7 +78,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'tienda_mangas',
         'USER': 'root',
-        'PASSWORD': '12345',
+        'PASSWORD': '',
         'HOST': 'localhost',
         'PORT': '3306'
     }
