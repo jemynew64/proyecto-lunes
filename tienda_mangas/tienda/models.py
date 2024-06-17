@@ -73,7 +73,7 @@ class Anime(models.Model):
     author = models.CharField(max_length=45)
     pub_year = models.CharField(max_length=45)
     description = models.TextField()
-    img_route = models.CharField(max_length=45)
+    img_route = models.CharField(max_length=200)
 
     class Meta:
         db_table = "Anime"

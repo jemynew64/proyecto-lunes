@@ -23,7 +23,7 @@ const App = () => {
   if (location.pathname === '/register') {
     return <RegistrarForm />;
   }
-  if (location.pathname === '/landing'){
+  if (location.pathname === '/'){
     return <Landing/>
   }
 
@@ -40,7 +40,7 @@ const App = () => {
       </Sidebar>
       <main className="flex-1 p-4">
       <Routes>
-        <Route path="/" element={<Navigate to="/landing" />} />
+        <Route path="/" element={<Navigate to="/" />} />
         <Route path="/login" element={<Form_login />} />
         {/* Rutas sin protección */}
         <Route path="/register" element={<RegistrarForm />} />

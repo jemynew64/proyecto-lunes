@@ -1,7 +1,8 @@
 from django.shortcuts import render
+from rest_framework import generics
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .serializers import UserSerializer, AnimeSerializer, UserAnimeFavoritesSerializer 
+from .serializers import UserSerializer, AnimeSerializer, UserAnimeFavoritesSerializer , AnimePublicSerializer
 
 # para el status
 from rest_framework import status
@@ -91,3 +92,8 @@ class UserAnimeFavoritesViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, IsAdminUser]
     queryset = UserAnimeFavorites.objects.all()
     serializer_class = UserAnimeFavoritesSerializer
+    
+
+class AnimeListView(generics.ListAPIView):
+    queryset = Anime.objects.all()
+    serializer_class = AnimePublicSerializer

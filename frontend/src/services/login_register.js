@@ -12,7 +12,6 @@ export const loginPost = async (userData) => (await axiosAuth.post('login', user
 export const RegisterPost = async (RegisterData) => (await axiosAuth.post('register', RegisterData)).data;
 //metodo get para obtener xd
 
-
 // export const loginPost = async (userData: UserLogin) => {
 //     try {
 //         const response = await axios.post('login', userData);

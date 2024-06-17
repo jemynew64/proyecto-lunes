@@ -32,4 +32,9 @@ class UserAnimeFavoritesSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserAnimeFavorites
         fields = ['idUsuario', 'idAnimes', 'is_favorite']
+        
+class AnimePublicSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Anime
+        fields = '__all__'
 
