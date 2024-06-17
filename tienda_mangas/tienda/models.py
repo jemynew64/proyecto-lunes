@@ -67,6 +67,8 @@ class User(AbstractBaseUser):
     def is_staff(self):
         return self.is_admin
     
+
+    
 class Anime(models.Model):
     idAnime = models.AutoField(primary_key=True)
     title = models.CharField(max_length=45)
@@ -83,9 +85,35 @@ class Anime(models.Model):
 
 class UserAnimeFavorites(models.Model):
     idUsuario = models.ForeignKey(User, on_delete=models.CASCADE)
-    idAnimes = models.ForeignKey(Anime, on_delete=models.CASCADE)
+    idAnime = models.ForeignKey(Anime, on_delete=models.CASCADE)
     is_favorite = models.BooleanField()
 
     class Meta:
         db_table = 'UserAnimeFavorites'
+
+    def __str__(self):
+        return self.title
+    
+class Category(models.Model):
+    idCategory = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=80)
+    img_route = models.CharField(max_length=200)
+
+    class Meta:
+        db_table = 'Category'
+
+    def __str__(self):
+        return self.title
+    
+class AnimeCategories(models.Model):
+    idAnime = models.ForeignKey(Anime, on_delete=models.CASCADE)
+    idCategory = models.ForeignKey(Category, on_delete=models.CASCADE)
+
+
+
+    
+
+
+
+
 
