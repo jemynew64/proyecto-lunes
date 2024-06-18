@@ -9,6 +9,7 @@ import { Form_login } from "./components/Form_login.jsx";
 // import { Navigation } from './components/Navigation.jsx';
 import { ProtectedRoute } from "./components/ProtectedRoute.jsx";
 import { useAuthStore } from "./store/auth.js";
+import { Category } from "./pages/Category.jsx";
 import { Anime } from "./pages/Anime.jsx";
 import { Admin } from "./pages/Admin.jsx";
 import { Usuario } from "./pages/Usuario.jsx";
@@ -51,6 +52,13 @@ const App = () => {
             to="/anime"
           />
         )}
+        {isPermissions === "administrador" && (
+          <SidebarItem
+            icon={<PersonStanding size={20} />}
+            text="Categorias"
+            to="/category"
+          />
+        )}
         {isAuth && (
           <SidebarItem
             icon={<LayoutDashboard size={20} />}
@@ -76,6 +84,7 @@ const App = () => {
           >
             <Route path="/admin" element={<Admin />} />
             <Route path="/anime" element={<Anime />} />
+            <Route path="/category" element={<Category />} />
           </Route>
           <Route element={<ProtectedRoute isAllowed={!!isAuth} />}>
             <Route path="/usuario" element={<Usuario />} />

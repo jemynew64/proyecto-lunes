@@ -25,4 +25,20 @@ INSERT INTO Anime (title, author, pub_year, description, img_route) VALUES
 
 select * from anime;
 
+INSERT INTO Category (name) VALUES
+('Acción'),
+('Aventura'),
+('Fantasía'),
+('Ciencia Ficción'),
+('Sobrenatural'),
+('Drama'),
+('Comedia'),
+('Misterio'),
+('Horror'),
+('Mecha'),
+('Romance'),
+('Artes Marciales'),
+('Psicológico'),
+('Suspense');
+
 VITE_API_URL="http://127.0.0.1:8000/api/"

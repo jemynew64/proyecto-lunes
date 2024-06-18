@@ -91,7 +91,6 @@ class UserAnimeFavorites(models.Model):
         return self.title
     
 class Category(models.Model):
-    # idCategory = models.AutoField(primary_key=True)
     name = models.CharField(max_length=80)
     img_route = models.ImageField(upload_to="images/", blank=True, null=True)
 
@@ -99,7 +98,7 @@ class Category(models.Model):
         db_table = 'Category'
 
     def __str__(self):
-        return self.title
+        return self.name
     
 class AnimeCategories(models.Model):
     idAnime = models.ForeignKey(Anime, on_delete=models.CASCADE)
