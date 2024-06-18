@@ -44,9 +44,10 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class AnimeCategoriesSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)  # Asegúrate de incluir el campo `id`
     class Meta:
         model = AnimeCategories
-        fields = ['idAnime','idCategory']
+        fields = ['id','idAnime','idCategory']
 
 class SubscriptionSerializer(serializers.ModelSerializer):
     class Meta:
