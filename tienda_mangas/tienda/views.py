@@ -18,6 +18,8 @@ from rest_framework.permissions import IsAuthenticated,IsAdminUser
 from rest_framework import viewsets
 # agregado por mi como extra 
 
+from rest_framework.parsers import MultiPartParser, FormParser
+
 from rest_framework_simplejwt.tokens import RefreshToken
 #########
 # Create your views here.
@@ -87,11 +89,15 @@ class AnimeViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, IsAdminUser]
     queryset = Anime.objects.all()
     serializer_class = AnimeSerializer
+    parser_classes = (MultiPartParser, FormParser)
 
-    def post(self, request, *args, **kwargs):
-        print(request.data)  # Verifica qué datos se están recibiendo
-        return super().post(request, *args, **kwargs)
-
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+    
 class UserAnimeFavoritesViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, IsAdminUser]
     queryset = UserAnimeFavorites.objects.all()

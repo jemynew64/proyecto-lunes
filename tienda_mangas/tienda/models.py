@@ -1,5 +1,4 @@
 # tienda/models.py
-import os
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -67,15 +66,12 @@ class User(AbstractBaseUser):
     def is_staff(self):
         return self.is_admin
     
-def get_upload_to(instance, filename):
-    return os.path.join('images', filename)
-    
 class Anime(models.Model):
     title = models.CharField(max_length=45)
     author = models.CharField(max_length=45)
     pub_year = models.CharField(max_length=45)
     description = models.TextField()
-    img_route = models.ImageField(upload_to=get_upload_to, blank=True, null=True)
+    img_route = models.ImageField(upload_to="images/", blank=True, null=True)
 
     class Meta:
         db_table = "Anime"
@@ -97,7 +93,7 @@ class UserAnimeFavorites(models.Model):
 class Category(models.Model):
     # idCategory = models.AutoField(primary_key=True)
     name = models.CharField(max_length=80)
-    img_route = models.ImageField(upload_to=get_upload_to, blank=True, null=True)
+    img_route = models.ImageField(upload_to="images/", blank=True, null=True)
 
     class Meta:
         db_table = 'Category'
