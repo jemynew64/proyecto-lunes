@@ -16,7 +16,7 @@ export const AnimeForm = ({ anime, onClose, onSave }) => {
       setAuthor(anime.author);
       setPubYear(anime.pub_year);
       setDescription(anime.description);
-      setImgRoute(anime.img_route);
+      setImgRoute(null); // Reset imgRoute
       setImgPreview(anime.img_route);
     }
   }, [anime]);
@@ -34,19 +34,26 @@ export const AnimeForm = ({ anime, onClose, onSave }) => {
     formData.append("author", author);
     formData.append("pub_year", pubYear);
     formData.append("description", description);
-    if (imgRoute instanceof File) {
+    if (imgRoute) {
       formData.append("img_route", imgRoute);
     }
 
-    if (anime) {
-      formData.append("idAnime", anime.idAnime);
-      await animeupdate(formData);
-    } else {
-      await animecreate(formData);
+    try {
+      if (anime && anime.id) {
+        formData.append("id", anime.id); // Add ID for update
+        await animeupdate(formData);
+      } else {
+        await animecreate(formData);
+      }
+      onSave();
+      onClose();
+    } catch (error) {
+      console.error(
+        "Error saving anime:",
+        error.response ? error.response.data : error.message
+      );
+      // Aquí puedes agregar lógica para mostrar un mensaje de error al usuario
     }
-
-    onSave();
-    onClose();
   };
 
   return (
@@ -154,7 +161,7 @@ export const AnimeForm = ({ anime, onClose, onSave }) => {
 
 AnimeForm.propTypes = {
   anime: PropTypes.shape({
-    idAnime: PropTypes.number,
+    id: PropTypes.number,
     title: PropTypes.string,
     author: PropTypes.string,
     pub_year: PropTypes.string,

@@ -24,3 +24,5 @@ INSERT INTO Anime (title, author, pub_year, description, img_route) VALUES
 ('One Punch Man', 'ONE', '2009', 'The story of Saitama, a hero that does it just for fun & can defeat his enemies with a single punch.', '');
 
 select * from anime;
+
+VITE_API_URL="http://127.0.0.1:8000/api/"

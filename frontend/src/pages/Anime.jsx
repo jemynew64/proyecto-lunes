@@ -1,38 +1,50 @@
 import { useState, useEffect } from "react";
 import { animeObtener, animeEliminar } from "../services/Anime/api";
+import { Edit, Trash } from "lucide-react";
 import { AnimeForm } from "../components/Anime/AnimeForm";
 
 export const Anime = () => {
   const [animes, setAnimes] = useState([]);
-  const [showModal, setShowModal] = useState(false);
   const [currentAnime, setCurrentAnime] = useState(null);
+  const [showForm, setShowForm] = useState(false);
 
-  const fetchAnimes = async () => {
+  useEffect(() => {
+    const fetchAnimes = async () => {
+      try {
+        const data = await animeObtener();
+        setAnimes(data);
+      } catch (error) {
+        console.error("Error fetching animes:", error);
+      }
+    };
+
+    fetchAnimes();
+  }, []);
+
+  const handleEdit = (anime) => {
+    setCurrentAnime(anime);
+    setShowForm(true);
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await animeEliminar(id);
+      setAnimes(animes.filter((anime) => anime.id !== id));
+    } catch (error) {
+      console.error("Error deleting anime:", error);
+    }
+  };
+
+  const handleSave = async () => {
+    setShowForm(false);
+    setCurrentAnime(null);
     const data = await animeObtener();
     setAnimes(data);
   };
 
-  useEffect(() => {
-    fetchAnimes();
-  }, []);
-
-  const handleDelete = async (id) => {
-    await animeEliminar(id);
-    fetchAnimes();
-  };
-
   const handleAdd = () => {
     setCurrentAnime(null);
-    setShowModal(true);
-  };
-
-  const handleEdit = (anime) => {
-    setCurrentAnime(anime);
-    setShowModal(true);
-  };
-
-  const handleSave = () => {
-    fetchAnimes();
+    setShowForm(true);
   };
 
   return (
@@ -60,7 +72,7 @@ export const Anime = () => {
                   Autor
                 </th>
                 <th scope="col" className="py-3 px-6">
-                  Año
+                  Año de Publicación
                 </th>
                 <th scope="col" className="py-3 px-6">
                   Acciones
@@ -70,7 +82,7 @@ export const Anime = () => {
             <tbody>
               {animes.map((anime) => (
                 <tr
-                  key={anime.idAnime}
+                  key={anime.id}
                   className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
                 >
                   <th
@@ -81,18 +93,18 @@ export const Anime = () => {
                   </th>
                   <td className="py-4 px-6">{anime.author}</td>
                   <td className="py-4 px-6">{anime.pub_year}</td>
-                  <td className="py-4 px-6">
+                  <td className="py-4 px-6 flex space-x-2">
                     <button
-                      className="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded"
+                      className="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded flex items-center"
                       onClick={() => handleEdit(anime)}
                     >
-                      Editar
+                      <Edit className="w-4 h-4 mr-1" /> Editar
                     </button>
                     <button
-                      className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
-                      onClick={() => handleDelete(anime.idAnime)}
+                      className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded flex items-center"
+                      onClick={() => handleDelete(anime.id)}
                     >
-                      Eliminar
+                      <Trash className="w-4 h-4 mr-1" /> Eliminar
                     </button>
                   </td>
                 </tr>
@@ -100,18 +112,18 @@ export const Anime = () => {
             </tbody>
           </table>
         </div>
-      </div>
-      {showModal && (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
-          <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-            <AnimeForm
-              anime={currentAnime}
-              onClose={() => setShowModal(false)}
-              onSave={handleSave}
-            />
+        {showForm && (
+          <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
+            <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+              <AnimeForm
+                anime={currentAnime}
+                onSave={handleSave}
+                onClose={() => setShowForm(false)}
+              />
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };
