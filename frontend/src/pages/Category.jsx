@@ -7,6 +7,7 @@ export const Category = () => {
   const [categories, setCategories] = useState([]);
   const [currentCategory, setCurrentCategory] = useState(null);
   const [showForm, setShowForm] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -47,6 +48,14 @@ export const Category = () => {
     setShowForm(true);
   };
 
+  const handleSearch = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const filteredCategories = categories.filter((category) =>
+    category.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div className="container mx-auto px-4 sm:px-8">
       <div className="py-8">
@@ -54,6 +63,13 @@ export const Category = () => {
           <h2 className="text-2xl font-semibold leading-tight">
             Lista de Categorías
           </h2>
+          <input
+            type="text"
+            placeholder="Buscar por nombre"
+            value={searchTerm}
+            onChange={handleSearch}
+            className="border rounded py-2 px-4"
+          />
           <button
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
             onClick={handleAdd}
@@ -74,7 +90,7 @@ export const Category = () => {
               </tr>
             </thead>
             <tbody>
-              {categories.map((category) => (
+              {filteredCategories.map((category) => (
                 <tr
                   key={category.id}
                   className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"

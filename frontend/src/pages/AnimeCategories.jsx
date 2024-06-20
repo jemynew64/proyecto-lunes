@@ -12,6 +12,7 @@ export const AnimeCategories = () => {
   const [animeCategories, setAnimeCategories] = useState([]);
   const [currentAnimeCategory, setCurrentAnimeCategory] = useState(null);
   const [showForm, setShowForm] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     const fetchAnimeCategories = async () => {
@@ -76,6 +77,14 @@ export const AnimeCategories = () => {
     setShowForm(true);
   };
 
+  const handleSearch = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const filteredAnimeCategories = animeCategories.filter((animeCategory) =>
+    animeCategory.idAnime.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div className="container mx-auto px-4 sm:px-8">
       <div className="py-8">
@@ -83,6 +92,13 @@ export const AnimeCategories = () => {
           <h2 className="text-2xl font-semibold leading-tight">
             Lista de Categorías de Anime
           </h2>
+          <input
+            type="text"
+            placeholder="Buscar por nombre"
+            value={searchTerm}
+            onChange={handleSearch}
+            className="border rounded py-2 px-4"
+          />
           <button
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
             onClick={handleAdd}
@@ -106,9 +122,9 @@ export const AnimeCategories = () => {
               </tr>
             </thead>
             <tbody>
-              {animeCategories.map((animeCategory) => (
+              {filteredAnimeCategories.map((animeCategory) => (
                 <tr
-                  key={animeCategory.id} // <-- Aquí aseguramos que la key sea única
+                  key={animeCategory.id}
                   className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
                 >
                   <th
