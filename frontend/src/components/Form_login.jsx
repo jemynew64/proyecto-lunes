@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { loginPost } from "../services/login_register";
 import toast, { Toaster } from 'react-hot-toast';
 import {useAuthStore} from "../store/auth";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 
 
@@ -32,9 +32,16 @@ export const Form_login = () => {
 
 return (
   <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="absolute top-0 left-0 m-4  p-2 rounded">
+    <Link to={"/"}>
+      <button className=" bg-[#9CEAEF] bg-opacity-75 text-black hover:text-white hover:bg-[#68D8D6] py-2 px-4 rounded-md border-2 border-white border-opacity-45 transition-all duration-750 ease-in-out font-mono">Atrás</button>
+    </Link>
+    </div>
     <Toaster />
-    <div className="w-full max-w-md p-8 space-y-4 bg-white rounded shadow-lg">
-      <h2 className="text-2xl font-bold text-center">Iniciar Sesión</h2>
+    <div className="w-full max-w-md p-8 space-y-4 bg-gradient-to-b from-[#d8f3f3] to-transparent rounded shadow-lg">
+      <div className="flex flex-col items-center">
+        <h2 className="text-[#07BEB8] text-3xl mb-4 font-mono font-semibold text-shadow-white">Inicio de Sesión</h2>
+      </div>
       <form onSubmit={onSubmit} className="space-y-6">
         <div>
           <input 
@@ -54,8 +61,8 @@ return (
                 message: 'Nombre debe tener máximo 20 caracteres'
               }
             })}
-            placeholder="Nombre"
-            className="w-full px-3 py-2 mt-1 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+            placeholder="Usuario"
+            className="w-full px-3 py-2 mt-1 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#07BEB8] focus:border-[#07BEB8] sm:text-medium font-mono"
           />
           {errors.username && <span className="text-sm text-red-600">{errors.username.message}</span>}
         </div>
@@ -79,18 +86,19 @@ return (
                 message: 'El password debe tener máximo 20 caracteres'
               }
             })}
-            placeholder="Password"
-            className="w-full px-3 py-2 mt-1 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+            placeholder="Contraseña"
+            className="w-full px-3 py-2 mt-1 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#07BEB8] focus:border-[#07BEB8] sm:text-medium"
           />
           {errors.password && <span className="text-sm text-red-600">{errors.password.message}</span>}
         </div>
-
+        <div className="flex flex-col items-center">
         <button 
           type="submit"
-          className="w-full px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          className="w-1/2 bg-[#9CEAEF] bg-opacity-75 text-black hover:text-white hover:bg-[#68D8D6] py-2 px-4 rounded-md border-2 border-white border-opacity-45 transition-all duration-750 ease-in-out font-mono"
         >
-          Logearse
+          Iniciar Sesión
         </button>
+        </div>
       </form>
     </div>
   </div>

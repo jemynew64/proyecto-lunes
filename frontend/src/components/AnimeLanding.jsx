@@ -125,9 +125,23 @@ export const Landing = () => {
       <div className="pt-20 static text-center w-full h-screen">
         <Carousel />
       </div>
+      
+      {/**VIDEO */}
+      <div className='items-center mt-5'>
+                <h1 className='text-5xl font-mono text-[#fdb3c5] font-bold text-center'>EN TENDENCIA ...</h1>
+
+            </div>
+            <div className="w-full py-5  flex justify-center">
+                <iframe
+                    className="w-1/2 aspect-video border-2 border-[white]  shadow-xl"
+                    src="https://www.youtube.com/embed/Yv0HPwz5KTQ?si=Ny3aTAgPgjxC5t8s"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                ></iframe>
+            </div>
 
       {/*Pie del landing page */}
-      <footer className="w-full mt-40 bg-scroll bg-cover bg-center opacity-80 ">
+      <footer className="w-full mt-20 bg-scroll bg-cover bg-center opacity-80 ">
         <div className="items-center mb-10 p-7 w-full flex justify-between px-60">
           {/**Logo de Tecsup */}
           <div className="ms-10 mt-2">
