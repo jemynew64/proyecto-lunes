@@ -15,13 +15,13 @@ export const Form_login = () => {
     try {
       const datos = await loginPost(data);
       toast.success('Login exitoso');
-      setAuth(datos.token, datos.user.role); // Almacena el token y el rol del usuario
+      setAuth(datos.token, datos.user.role, datos.user.id); // Almacena el token y el rol del usuario
       reset();
       // Redirige según el rol del usuario
       if (datos.user.role === 'administrador') {
         navigate("/admin");
       } else {
-        navigate("/usuario");
+        navigate("/lista-animes");
       }
     } catch (error) {
       toast.error('Error en el inicio de sesión');

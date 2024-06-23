@@ -81,7 +81,7 @@ export const Landing = () => {
           <div className="mt-5 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8 w-full px-6 ">
             {animes.map((anime) => (
               <div
-                key={anime.idAnime}
+                key={anime.id}
                 className="flex flex-col bg-white hover:bg-[#ffffffe0] bg-opacity-70 p-6 rounded-md border-2 border-[white] hover:shadow-2xl  shadow-lg font-mono "
               >
                 {/**Imagen y titulo del card */}

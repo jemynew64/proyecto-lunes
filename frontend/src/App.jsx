@@ -10,10 +10,9 @@ import { Form_login } from "./components/Form_login.jsx";
 import { ProtectedRoute } from "./components/ProtectedRoute.jsx";
 import { useAuthStore } from "./store/auth.js";
 import { Category } from "./pages/Category.jsx";
-import { AnimeFavorite } from "./pages/AnimeFavorite.jsx";
+import { Favoritos } from "./pages/Favoritos.jsx";
 import { Anime } from "./pages/Anime.jsx";
 import { Admin } from "./pages/Admin.jsx";
-import { Usuario } from "./pages/Usuario.jsx";
 import { RegistrarForm } from "./pages/RegisterForm.jsx";
 import { Landing } from "./components/AnimeLanding.jsx";
 import Sidebar, { SidebarItem } from "./components/Sidebar";
@@ -26,7 +25,10 @@ import {
   Library,
 } from "lucide-react";
 import { AnimeCategories } from "./pages/AnimeCategories.jsx";
-
+import { ListaAnimes } from "./pages/ListaAnimes.jsx";
+import { SubscriptionList } from "./pages/SubscriptionList.jsx";
+import { AnimeDetail } from "./pages/AnimeDetail.jsx";
+import { PaymentForm } from "./pages/PaymentForm.jsx";
 const App = () => {
   const location = useLocation();
   const isAuth = useAuthStore((state) => state.isAuth);
@@ -57,8 +59,9 @@ const App = () => {
           )}
         {isPermissions === "usuario" && (
           <>
-          <SidebarItem icon={<LayoutDashboard size={20} />} text="Usuario" to="/usuario" />
-          <SidebarItem icon={<Heart size={20} />} text="Favoritos" to="/animefavorite" />
+          <SidebarItem icon={<LayoutDashboard size={20} />} text="Lista de Animes" to="/lista-animes" />
+          <SidebarItem icon={<Heart size={20} />} text="Favoritos" to="/favoritos" />
+          <SidebarItem icon={<Search size={20} />} text="Cuenta" to="/search" />
           </>
         )}
       </Sidebar>
@@ -77,8 +80,11 @@ const App = () => {
             <Route path="/animecategories" element={<AnimeCategories />} />
           </Route>
           <Route element={<ProtectedRoute isAllowed={!!isAuth && isPermissions === "usuario"} />}>
-          <Route path="/usuario" element={<Usuario />} />
-          <Route path="/animefavorite" element={<AnimeFavorite />} />
+          <Route path="/lista-animes" element={<ListaAnimes />} />
+          <Route path="/favoritos" element={<Favoritos />} />
+          <Route path="/anime/:idAnime" element={<AnimeDetail />} />
+          <Route path="/subscriptions" element={<SubscriptionList />} />
+          <Route path="/payment/:subscriptionId" element={<PaymentForm />} />
           </Route>
         </Routes>
       </main>
