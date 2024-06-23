@@ -6,6 +6,7 @@ export const Admin = () => {
   const [usuarios, setUsuarios] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [currentUsuario, setCurrentUsuario] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const fetchUsuarios = async () => {
     const data = await usuariosObtener();
@@ -35,6 +36,14 @@ export const Admin = () => {
     fetchUsuarios();
   };
 
+  const handleSearch = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const filteredUsuarios = usuarios.filter((usuario) =>
+    usuario.username.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div className="container mx-auto px-4 sm:px-8">
       <div className="py-8">
@@ -42,6 +51,13 @@ export const Admin = () => {
           <h2 className="text-2xl font-semibold leading-tight">
             Registro de Usuarios
           </h2>
+          <input
+            type="text"
+            placeholder="Buscar por nombre de usuario"
+            value={searchTerm}
+            onChange={handleSearch}
+            className="border rounded py-2 px-4"
+          />
           <button
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
             onClick={handleAdd}
@@ -74,7 +90,7 @@ export const Admin = () => {
               </tr>
             </thead>
             <tbody>
-              {usuarios.map((usuario) => (
+              {filteredUsuarios.map((usuario) => (
                 <tr
                   key={usuario.id}
                   className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"

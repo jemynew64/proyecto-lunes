@@ -86,9 +86,11 @@ class UserAnimeFavorites(models.Model):
 
     class Meta:
         db_table = 'UserAnimeFavorites'
+        unique_together = ('idUsuario', 'idAnime')
+
 
     def __str__(self):
-        return self.title
+        return f'{self.idUsuario} - {self.idAnime.title}'
     
 class Category(models.Model):
     name = models.CharField(max_length=80)

@@ -1,50 +1,79 @@
 import { useState, useEffect } from "react";
-import { categoryObtener, categoryEliminar } from "../services/Category/api";
+import {
+  animecategoriesObtener,
+  animecategoriesEliminar,
+} from "../services/AnimeCategories/api";
+import { animeObtenerid } from "../services/Anime/api";
+import { categoryObtenerid } from "../services/Category/api";
 import { Edit, Trash } from "lucide-react";
-import { CategoryForm } from "../components/Categoria/CategoryForm";
+import { AnimeCategoriesForm } from "../components/AnimeCategories/AnimeCategoriesForm";
 
-export const Category = () => {
-  const [categories, setCategories] = useState([]);
-  const [currentCategory, setCurrentCategory] = useState(null);
+export const AnimeCategories = () => {
+  const [animeCategories, setAnimeCategories] = useState([]);
+  const [currentAnimeCategory, setCurrentAnimeCategory] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
-    const fetchCategories = async () => {
+    const fetchAnimeCategories = async () => {
       try {
-        const data = await categoryObtener();
-        setCategories(data);
+        const data = await animecategoriesObtener();
+        const detailedData = await Promise.all(
+          data.map(async (item) => {
+            const anime = await animeObtenerid(item.idAnime);
+            const category = await categoryObtenerid(item.idCategory);
+            return {
+              ...item,
+              idAnime: anime,
+              idCategory: category,
+            };
+          })
+        );
+        setAnimeCategories(detailedData);
       } catch (error) {
-        console.error("Error fetching categories:", error);
+        console.error("Error fetching anime categories:", error);
       }
     };
 
-    fetchCategories();
+    fetchAnimeCategories();
   }, []);
 
-  const handleEdit = (category) => {
-    setCurrentCategory(category);
+  const handleEdit = (animeCategory) => {
+    setCurrentAnimeCategory(animeCategory);
     setShowForm(true);
   };
 
   const handleDelete = async (id) => {
     try {
-      await categoryEliminar(id);
-      setCategories(categories.filter((category) => category.id !== id));
+      await animecategoriesEliminar(id);
+      setAnimeCategories(
+        animeCategories.filter((animeCategory) => animeCategory.id !== id)
+      );
     } catch (error) {
-      console.error("Error deleting category:", error);
+      console.error("Error deleting anime category:", error);
     }
   };
 
   const handleSave = async () => {
     setShowForm(false);
-    setCurrentCategory(null);
-    const data = await categoryObtener();
-    setCategories(data);
+    setCurrentAnimeCategory(null);
+    const data = await animecategoriesObtener();
+    const detailedData = await Promise.all(
+      data.map(async (item) => {
+        const anime = await animeObtenerid(item.idAnime);
+        const category = await categoryObtenerid(item.idCategory);
+        return {
+          ...item,
+          idAnime: anime,
+          idCategory: category,
+        };
+      })
+    );
+    setAnimeCategories(detailedData);
   };
 
   const handleAdd = () => {
-    setCurrentCategory(null);
+    setCurrentAnimeCategory(null);
     setShowForm(true);
   };
 
@@ -52,8 +81,8 @@ export const Category = () => {
     setSearchTerm(event.target.value);
   };
 
-  const filteredCategories = categories.filter((category) =>
-    category.name.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredAnimeCategories = animeCategories.filter((animeCategory) =>
+    animeCategory.idAnime.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -61,7 +90,7 @@ export const Category = () => {
       <div className="py-8">
         <div className="flex justify-between mb-4">
           <h2 className="text-2xl font-semibold leading-tight">
-            Lista de Categorías
+            Lista de Categorías de Anime
           </h2>
           <input
             type="text"
@@ -74,7 +103,7 @@ export const Category = () => {
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
             onClick={handleAdd}
           >
-            Agregar Categoría
+            Agregar Categoría de Anime
           </button>
         </div>
         <div className="overflow-x-auto relative shadow-md sm:rounded-lg">
@@ -82,7 +111,10 @@ export const Category = () => {
             <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
               <tr>
                 <th scope="col" className="py-3 px-6">
-                  Nombre
+                  Anime
+                </th>
+                <th scope="col" className="py-3 px-6">
+                  Categoría
                 </th>
                 <th scope="col" className="py-3 px-6">
                   Acciones
@@ -90,27 +122,28 @@ export const Category = () => {
               </tr>
             </thead>
             <tbody>
-              {filteredCategories.map((category) => (
+              {filteredAnimeCategories.map((animeCategory) => (
                 <tr
-                  key={category.id}
+                  key={animeCategory.id}
                   className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
                 >
                   <th
                     scope="row"
                     className="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                   >
-                    {category.name}
+                    {animeCategory.idAnime.title}
                   </th>
+                  <td className="py-4 px-6">{animeCategory.idCategory.name}</td>
                   <td className="py-4 px-6 flex space-x-2">
                     <button
                       className="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded flex items-center"
-                      onClick={() => handleEdit(category)}
+                      onClick={() => handleEdit(animeCategory)}
                     >
                       <Edit className="w-4 h-4 mr-1" /> Editar
                     </button>
                     <button
                       className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded flex items-center"
-                      onClick={() => handleDelete(category.id)}
+                      onClick={() => handleDelete(animeCategory.id)}
                     >
                       <Trash className="w-4 h-4 mr-1" /> Eliminar
                     </button>
@@ -123,8 +156,8 @@ export const Category = () => {
         {showForm && (
           <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
             <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-              <CategoryForm
-                category={currentCategory}
+              <AnimeCategoriesForm
+                animeCategory={currentAnimeCategory}
                 onSave={handleSave}
                 onClose={() => setShowForm(false)}
               />
