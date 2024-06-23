@@ -68,7 +68,7 @@ const Carousel = () => {
                                     </div>
                                     <img className="w-full h-auto object-cover mb-4 border-2 border-[white]" src={categories[index].img_route} alt={categories[index].name} />
                                     <div>
-                                        <button className="bg-white text-white py-2 px-4 rounded"></button>
+                                        <button className="bg-[#C4FFF9] text-white py-2 px-4 rounded"></button>
                                     </div>
                                 </div>
                             </div>
@@ -83,7 +83,7 @@ const Carousel = () => {
                                     </div>
                                     <img className="w-full h-auto object-cover mb-4 border-2 border-[white]" src={categories[index].img_route} alt={categories[index].name} />
                                     <div>
-                                        <button className="bg-white text-white py-2 px-4 "></button>
+                                        <button className="bg-[#C4FFF9] text-white py-2 px-4 "></button>
                                     </div>
                                 </div>
                             </div>

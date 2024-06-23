@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { RegisterPost } from "../services/login_register";
 import toast, { Toaster } from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 export const RegistrarForm = () => {
   const {
@@ -28,24 +28,27 @@ export const RegistrarForm = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen ">
+    <div className="flex items-center justify-center min-h-screen  ">
+      <div className="absolute top-0 left-0 m-4  p-2 rounded">
+    <Link to={"/"}>
+      <button className=" bg-[#9CEAEF] bg-opacity-75 text-black hover:text-white hover:bg-[#68D8D6] py-2 px-4 rounded-md border-2 border-white border-opacity-45 transition-all duration-750 ease-in-out font-mono">Atrás</button>
+    </Link>
+    </div>
       <Toaster />
-      <div className="bg-slate-300 p-8 rounded-lg shadow-lg max-w-md w-full">
-        <h2 className="text-2xl font-bold mb-6 text-gray-900">
-          Registrar Usuarios
-        </h2>
+      <div className="bg-gradient-to-b from-[#d8f3f3] to-transparent p-8 rounded-lg shadow-lg max-w-md w-full">
+        <div className="flex flex-col items-center">
+          <h2 className="text-[#07BEB8] text-3xl mb-4 font-mono font-semibold text-shadow-white">
+            Registro
+          </h2>
+        </div>
+    
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-4">
-            <label
-              htmlFor="username"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Nombre para logiarse
-            </label>
+            
             <input
               type="text"
               {...register("username", { required: true, minLength: 3 })}
-              className="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+              className="w-full px-3 py-2 mt-1 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#07BEB8] focus:border-[#07BEB8] sm:text-medium font-mono" placeholder="Usuario"
             />
             {errors.username && errors.username.type === "required" && (
               <span className="text-red-500">Este campo es requerido</span>
@@ -57,44 +60,28 @@ export const RegistrarForm = () => {
             )}
           </div>
           <div className="mb-4">
-            <label
-              htmlFor="name"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Nombres
-            </label>
+          
             <input
               type="text"
               {...register("name", { required: true })}
-              className="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+              className="w-full px-3 py-2 mt-1 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#07BEB8] focus:border-[#07BEB8] sm:text-medium font-mono" placeholder="Nombres"
             />
             {errors.name && (
               <span className="text-red-500">Este campo es requerido</span>
             )}
           </div>
           <div className="mb-4">
-            <label
-              htmlFor="surname"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Apellidos
-            </label>
             <input
               type="text"
               {...register("surname", { required: true })}
-              className="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+              className="w-full px-3 py-2 mt-1 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#07BEB8] focus:border-[#07BEB8] sm:text-medium font-mono" placeholder="Apellidos"
             />
             {errors.surname && (
               <span className="text-red-500">Este campo es requerido</span>
             )}
           </div>
           <div className="mb-4">
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Correo Electrónico
-            </label>
+            
             <input
               type="email"
               {...register("email", {
@@ -104,23 +91,17 @@ export const RegistrarForm = () => {
                   message: "Formato de correo electrónico inválido",
                 },
               })}
-              className="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+              className="w-full px-3 py-2 mt-1 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#07BEB8] focus:border-[#07BEB8] sm:text-medium font-mono" placeholder="Correo Electrónico"
             />
             {errors.email && (
               <span className="text-red-500">{errors.email.message}</span>
             )}
           </div>
           <div className="mb-4">
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Contraseña
-            </label>
             <input
               type="password"
               {...register("password", { required: true, minLength: 6 })}
-              className="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+              className="w-full px-3 py-2 mt-1 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#07BEB8] focus:border-[#07BEB8] sm:text-medium font-mono" placeholder="Contraseña"
             />
             {errors.password && errors.password.type === "required" && (
               <span className="text-red-500">Este campo es requerido</span>
@@ -132,12 +113,6 @@ export const RegistrarForm = () => {
             )}
           </div>
           <div className="mb-4">
-            <label
-              htmlFor="confirmPassword"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Confirmar Contraseña
-            </label>
             <input
               type="password"
               {...register("confirmPassword", {
@@ -145,7 +120,7 @@ export const RegistrarForm = () => {
                 validate: (value) =>
                   value === password || "Las contraseñas no coinciden",
               })}
-              className="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+              className="w-full px-3 py-2 mt-1 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#07BEB8] focus:border-[#07BEB8] sm:text-medium font-mono" placeholder="Repita la Contraseña"
             />
             {errors.confirmPassword && (
               <span className="text-red-500">
@@ -154,18 +129,19 @@ export const RegistrarForm = () => {
             )}
           </div>
           <div className="flex justify-between">
-            <button
-              type="submit"
-              className="bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-            >
-              Guardar
-            </button>
+            
             <button
               type="button"
               onClick={() => reset()}
-              className="bg-gray-600 text-white py-2 px-4 rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+              className="w-1/3 bg-[#9CEAEF] bg-opacity-75 text-black hover:text-white hover:bg-[#68D8D6] py-2 px-4 rounded-md border-2 border-white border-opacity-45 transition-all duration-750 ease-in-out font-mon"
             >
-              Resetear
+              Limpiar
+            </button>
+            <button
+              type="submit"
+              className="w-1/3 bg-[#9CEAEF] bg-opacity-75 text-black hover:text-white hover:bg-[#07BEB8] py-2 px-4 rounded-md border-2 border-white border-opacity-45 transition-all duration-750 ease-in-out font-mon"
+            >
+              Guardar
             </button>
           </div>
         </form>
