@@ -108,6 +108,7 @@ class AnimeListView(generics.ListAPIView):
     serializer_class = AnimePublicSerializer
 
 class CategoryViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated, IsAdminUser]
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
@@ -119,14 +120,17 @@ class CategoryViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 class AnimeCategoriesViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated, IsAdminUser]
     queryset = AnimeCategories.objects.all()
     serializer_class = AnimeCategoriesSerializer
 
 class SubscriptionViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated, IsAdminUser]
     queryset = Subscription.objects.all()
     serializer_class = SubscriptionSerializer
 
 class UserSubscriptionViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated, IsAdminUser]
     queryset = UserSubscription.objects.all()
     serializer_class = UserSubscriptionSerializer
 
