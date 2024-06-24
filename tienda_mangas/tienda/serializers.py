@@ -61,7 +61,11 @@ class SubscriptionSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class UserSubscriptionSerializer(serializers.ModelSerializer):
-    subscription = SubscriptionSerializer(source='idSubscription')
+    Usuario_nombre = serializers.ReadOnlyField(source='idUser.name')
+    Usuario_apellido = serializers.ReadOnlyField(source='idUser.surname')
+    Subscripcion_nombre = serializers.ReadOnlyField(source='idSubscription.name')
+    subscription = SubscriptionSerializer(source='idSubscription', required=False)
+
     class Meta:
         model = UserSubscription
         fields = '__all__'

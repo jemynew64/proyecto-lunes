@@ -127,7 +127,7 @@ class UserSubscription(models.Model):
     subscriptionDate = models.DateTimeField()
     terminationDate = models.DateTimeField()
     activeStatus = models.BooleanField()
-
+    
     class Meta:
         db_table = "UserSubscription"
 
