@@ -230,10 +230,12 @@ class CategoryPrivViewSet(viewsets.ModelViewSet):
 
 
 class AnimeCategoriesViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated, IsAdminUser]
     queryset = AnimeCategories.objects.all()
     serializer_class = AnimeCategoriesSerializer
 
 class SubscriptionViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated, IsAdminUser]
     queryset = Subscription.objects.all()
     serializer_class = SubscriptionSerializer
 
@@ -243,6 +245,7 @@ class SubscriptionPrivViewSet(viewsets.ModelViewSet):
     serializer_class = SubscriptionSerializer
 
 class UserSubscriptionViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated, IsAdminUser]
     queryset = UserSubscription.objects.all()
     serializer_class = UserSubscriptionSerializer
 
