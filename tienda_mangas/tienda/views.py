@@ -237,6 +237,11 @@ class SubscriptionViewSet(viewsets.ModelViewSet):
     queryset = Subscription.objects.all()
     serializer_class = SubscriptionSerializer
 
+class SubscriptionPrivViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    queryset = Subscription.objects.all()
+    serializer_class = SubscriptionSerializer
+
 class UserSubscriptionViewSet(viewsets.ModelViewSet):
     queryset = UserSubscription.objects.all()
     serializer_class = UserSubscriptionSerializer
