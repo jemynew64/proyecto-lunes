@@ -22,12 +22,15 @@ import {
   Search,
   Heart,
   Library,
+  Podcast ,
 } from "lucide-react";
 import { AnimeCategories } from "./pages/AnimeCategories.jsx";
 import { ListaAnimes } from "./pages/ListaAnimes.jsx";
 import { SubscriptionList } from "./pages/SubscriptionList.jsx";
 import { AnimeDetail } from "./pages/AnimeDetail.jsx";
 import { PaymentForm } from "./pages/PaymentForm.jsx";
+import { Subscription } from "./pages/Subscription.jsx";
+import { Usersubscription} from "./pages/Usersubscription.jsx";
 import CuentaPage from "./pages/CuentaPage.jsx"; // Asegúrate de importar correctamente
 
 const App = () => {
@@ -57,6 +60,8 @@ const App = () => {
             <SidebarItem icon={<BookOpenText size={20} />} text="Anime" to="/anime" />
             <SidebarItem icon={<Search size={20} />} text="Categorias" to="/category" />
             <SidebarItem icon={<Library size={20} />} text="Categorizacion" to="/animecategories" />
+            <SidebarItem icon={<Podcast size={20} />} text="Subscription" to="/Subscription" />
+            <SidebarItem icon={<Podcast size={20} />} text="UserSubscription" to="/UserSubscription" />
           </>
         )}
         {isPermissions === "usuario" && (
@@ -80,6 +85,8 @@ const App = () => {
             <Route path="/anime" element={<Anime />} />
             <Route path="/category" element={<Category />} />
             <Route path="/animecategories" element={<AnimeCategories />} />
+            <Route path="/Subscription" element={<Subscription />} />
+            <Route path="/UserSubscription" element={<Usersubscription />} />
           </Route>
           <Route element={<ProtectedRoute isAllowed={!!isAuth && isPermissions === "usuario"} />}>
             <Route path="/lista-animes" element={<ListaAnimes />} />
