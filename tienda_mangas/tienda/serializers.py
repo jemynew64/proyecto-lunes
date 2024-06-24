@@ -24,15 +24,18 @@ class UserSerializer(serializers.ModelSerializer):
         return super().update(instance, validated_data)
 
 class AnimeSerializer(serializers.ModelSerializer):
+    categories = serializers.SerializerMethodField()
     class Meta:
         model = Anime
         fields = '__all__'
+    def get_categories(self, obj):
+        return obj.animecategories_set.values_list('idCategory__name', flat=True)
 
 class UserAnimeFavoritesSerializer(serializers.ModelSerializer):
-    idAnime = AnimeSerializer(read_only=True) 
+    idAnime = AnimeSerializer(read_only=True)
     class Meta:
         model = UserAnimeFavorites
-        fields = ['idUsuario', 'idAnime', 'is_favorite']
+        fields = ['id', 'idUsuario', 'idAnime', 'is_favorite']
         
 class AnimePublicSerializer(serializers.ModelSerializer):
     categories = serializers.SerializerMethodField()
@@ -41,7 +44,6 @@ class AnimePublicSerializer(serializers.ModelSerializer):
         fields = '__all__'
     def get_categories(self, obj):
         return obj.animecategories_set.values_list('idCategory__name', flat=True)
-
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category

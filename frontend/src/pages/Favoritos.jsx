@@ -15,7 +15,7 @@ export const Favoritos = () => {
         const fetchFavorites = async () => {
             try {
                 const data = await userAnimeFavorites(userId);
-                console.log(data); // Verificar los datos recibidos
+                // console.log('Fetched favorites:', data); // Verificar los datos recibidos
                 setFavorites(data);
             } catch (error) {
                 setError('Error fetching favorites');
@@ -68,45 +68,59 @@ export const Favoritos = () => {
             </div>
             <div className="bg-fixed bg-cover bg-center h-auto w-full m-10 border-2 border-[#07BEB8]"
                 style={{
-                backgroundImage:'url("https://img.freepik.com/free-photo/magenta-mystical-landscape-with-nature_23-2150693917.jpg?t=st=1718524139~exp=1718527739~hmac=5cf0e58470a7e79a5384755eda2f9c4d29c033b6c51fb22a3110863a3e904a39&w=1380")',
+                    backgroundImage: 'url("https://img.freepik.com/free-photo/magenta-mystical-landscape-with-nature_23-2150693917.jpg?t=st=1718524139~exp=1718527739~hmac=5cf0e58470a7e79a5384755eda2f9c4d29c033b6c51fb22a3110863a3e904a39&w=1380")',
                 }}>
-            <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-10 w-full px-6">
-                {currentFavorites.map((fav) => (
-                    <div
-                        key={fav.idAnime.id} 
-                        className="flex flex-col bg-white hover:bg-gray-100 bg-opacity-90 p-6 rounded-lg border-2 border-white hover:shadow-2xl shadow-lg font-mono transition-all duration-500 ease-in-out transform hover:scale-105"
-                    >
-                        <img
-                            className="w-full h-48 object-cover rounded-md mb-4"
-                            src={fav.idAnime.img_route}
-                            alt={fav.idAnime.title}
-                        />
-                        <div className="text-center">
-                            <h2 className="uppercase font-bold text-2xl mb-2">{fav.idAnime.title}</h2>
-                            <div className="text-lg mb-2">
-                                <span className="font-bold">Autor:</span> {fav.idAnime.author}
-                            </div>
-                            <div className="text-lg mb-2">
-                                <span className="font-bold">Año de Publicación:</span> {fav.idAnime.pub_year}
-                            </div>
-                        </div>
-                        <div className="flex justify-center items-center mt-5">
-                            <button
-                                onClick={() => handleRemoveFromFavorites(fav.idAnime.id)}
-                                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition-all duration-500 ease-in-out transform hover:scale-105"
+                {currentFavorites.length > 0 ? (
+                    <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-10 w-full px-6">
+                        {currentFavorites.map((fav, index) => (
+                            <div
+                                key={`${fav.idUsuario}-${fav.idAnime?.id || index}`} // Cambiado a una clave combinada con índice como fallback
+                                className="flex flex-col bg-white hover:bg-gray-100 bg-opacity-90 p-6 rounded-lg border-2 border-white hover:shadow-2xl shadow-lg font-mono transition-all duration-500 ease-in-out transform hover:scale-105"
                             >
-                                Remove from Favorites
-                            </button>
-                        </div>
+                                {fav.idAnime ? (
+                                    <>
+                                        <img
+                                            className="w-full h-48 object-cover rounded-md mb-4"
+                                            src={fav.idAnime.img_route}
+                                            alt={fav.idAnime.title}
+                                        />
+                                        <div className="text-center">
+                                            <h2 className="uppercase font-bold text-2xl mb-2">{fav.idAnime.title}</h2>
+                                            <div className="text-lg mb-2">
+                                                <span className="font-bold">Autor:</span> {fav.idAnime.author}
+                                            </div>
+                                            <div className="text-lg mb-2">
+                                                <span className="font-bold">Año de Publicación:</span> {fav.idAnime.pub_year}
+                                            </div>
+                                        </div>
+                                        <div className="flex justify-center items-center mt-5">
+                                            <button
+                                                onClick={() => handleRemoveFromFavorites(fav.idAnime.id)}
+                                                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition-all duration-500 ease-in-out transform hover:scale-105"
+                                            >
+                                                Remove from Favorites
+                                            </button>
+                                        </div>
+                                    </>
+                                ) : (
+                                    <div className="text-center text-lg text-red-500">Anime data is missing</div>
+                                )}
+                            </div>
+                        ))}
                     </div>
-                ))}
+                ) : (
+                    <div className="flex justify-center items-center h-64">
+                        <p>No hay animes añadidos a Favoritos.</p>
+                    </div>
+                )}
             </div>
-            </div>
-            <Pagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                paginate={paginate}
-            />
+            {currentFavorites.length > 0 && (
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    paginate={paginate}
+                />
+            )}
         </div>
     );
 };

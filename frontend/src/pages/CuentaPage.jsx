@@ -4,7 +4,7 @@ import { useAuthStore } from '../store/auth';
 import axios from 'axios';
 import { Toaster } from 'react-hot-toast';
 
-const ProfilePage = () => {
+const CuentaPage = () => {
     const { token } = useAuthStore(state => state);
     const [profile, setProfile] = useState(null);
     const [error, setError] = useState(null);
@@ -79,4 +79,4 @@ const ProfilePage = () => {
     );
 };
 
-export default ProfilePage;
+export default CuentaPage;

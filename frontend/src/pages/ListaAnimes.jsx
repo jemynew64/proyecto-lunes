@@ -1,3 +1,4 @@
+// src/pages/ListaAnimes.jsx
 import { useState, useEffect } from "react";
 import { animesObtener, addToFavorites, fetchCategories } from '../services/AnimePrivate/apiAnimeL';
 import { useAuthStore } from "../store/auth";
@@ -157,9 +158,7 @@ export const ListaAnimes = () => {
                     currentPage={currentPage}
                 />
             </div>
-            
         </div>
-        
     );
 };
 

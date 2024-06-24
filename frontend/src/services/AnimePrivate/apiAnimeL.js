@@ -68,7 +68,7 @@ export const fetchAnimeDetails = async (id) => {
 
 export const fetchSubscriptions = async () => {
     try {
-        const response = await axiosJWT.get('subscriptions/');
+        const response = await axiosJWT.get('subscription-priv/');
         return response.data;
     } catch (error) {
         console.error("Error fetching subscriptions:", error);
@@ -116,7 +116,7 @@ export const userAnimeFavorites = async (userId) => {
 };
 
 export const fetchCategories = async () => {
-    const response = await axiosJWT.get('category/');
+    const response = await axiosJWT.get('category-priv/');
     return response.data;
 };
 

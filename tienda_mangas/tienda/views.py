@@ -1,29 +1,18 @@
 from django.shortcuts import render
-from rest_framework import generics
-from rest_framework.decorators import api_view
+from rest_framework import generics, status, viewsets
+from rest_framework.decorators import api_view, action
+from rest_framework.permissions import IsAuthenticated, IsAdminUser, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
-from .serializers import UserDetailSerializer, UserSerializer, AnimeSerializer, UserAnimeFavoritesSerializer , AnimePublicSerializer, CategorySerializer, AnimeCategoriesSerializer, SubscriptionSerializer, UserSubscriptionSerializer
-
-# para el status
-from rest_framework import status
-
-# para las acciones
-from rest_framework.decorators import action
-from .models import User, Anime, UserAnimeFavorites, Category, AnimeCategories, Subscription, UserSubscription
-
-# para permisos de quien puede verlo 
-from rest_framework.permissions import IsAuthenticated,IsAdminUser,IsAuthenticatedOrReadOnly
-
-# para crud
-from rest_framework import viewsets
-# agregado por mi como extra 
-
 from rest_framework.parsers import MultiPartParser, FormParser
-
 from rest_framework_simplejwt.tokens import RefreshToken
 from datetime import datetime, timedelta
-#########
-# Create your views here.
+from .serializers import (
+    UserDetailSerializer, UserSerializer, AnimeSerializer, UserAnimeFavoritesSerializer, 
+    AnimePublicSerializer, CategorySerializer, AnimeCategoriesSerializer, SubscriptionSerializer, 
+    UserSubscriptionSerializer
+)
+from .models import User, Anime, UserAnimeFavorites, Category, AnimeCategories, Subscription, UserSubscription
+
 class UserViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, IsAdminUser]
     queryset = User.objects.exclude(role='administrador')
@@ -42,12 +31,12 @@ class UserViewSet(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         response = super().list(request, *args, **kwargs)
         for user in response.data:
-            user['password'] = '********'  # Mask the password in the response
+            user['password'] = '********'
         return response
 
     def retrieve(self, request, *args, **kwargs):
         response = super().retrieve(request, *args, **kwargs)
-        response.data['password'] = '********'  # Mask the password in the response
+        response.data['password'] = '********'
         return response
 
 @api_view(['POST'])
@@ -70,13 +59,8 @@ def login(request):
 def register(request):
     serializer = UserSerializer(data=request.data)
     if serializer.is_valid():
-        # Guardar el usuario
         user = serializer.save()
-
-        # Crear el token de acceso y el token de actualización
         refresh = RefreshToken.for_user(user)
-
-        # Devolver la respuesta con el token de acceso, el token de actualización y los datos del usuario serializados
         return Response({
             'token': str(refresh.access_token),
             'refresh_token': str(refresh),
@@ -84,7 +68,6 @@ def register(request):
         }, status=status.HTTP_201_CREATED)
 
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 class AnimeViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, IsAdminUser]
@@ -98,11 +81,12 @@ class AnimeViewSet(viewsets.ModelViewSet):
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-    
+
 class AnimePriUserViewset(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = Anime.objects.all()
     serializer_class = AnimePublicSerializer
+
     def get_queryset(self):
         queryset = super().get_queryset()
         title = self.request.query_params.get('title')
@@ -114,10 +98,65 @@ class AnimePriUserViewset(viewsets.ModelViewSet):
             queryset = queryset.filter(animecategories__idCategory__name__icontains=category)
         
         return queryset
+
+class AnimeListView(generics.ListAPIView):
+    queryset = Anime.objects.all()
+    serializer_class = AnimePublicSerializer
+
+class CategoryViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated, IsAdminUser]
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+class CategoryPrivViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+
+class AnimeCategoriesViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated, IsAdminUser]
+    queryset = AnimeCategories.objects.all()
+    serializer_class = AnimeCategoriesSerializer
+
+class SubscriptionViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated, IsAdminUser]
+    queryset = Subscription.objects.all()
+    serializer_class = SubscriptionSerializer
+
+class UserSubscriptionViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated, IsAdminUser]
+    queryset = UserSubscription.objects.all()
+    serializer_class = UserSubscriptionSerializer
+
+class UserProfileView(generics.RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserDetailSerializer
+
+    def get_object(self):
+        return self.request.user
+
+class SubscriptionPrivViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    queryset = Subscription.objects.all()
+    serializer_class = SubscriptionSerializer
+
+class UserSubscriptionPrivViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    queryset = UserSubscription.objects.all()
+    serializer_class = UserSubscriptionSerializer
+
 class UserAnimeFavoritesViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = UserAnimeFavorites.objects.all()
     serializer_class = UserAnimeFavoritesSerializer
+
     def get_queryset(self):
         user_id = self.request.query_params.get('userId')
         if user_id:
@@ -161,19 +200,12 @@ def remove_from_favorites(request, anime_id):
         return Response({"error": "User ID is required"}, status=status.HTTP_400_BAD_REQUEST)
 
     try:
-        anime = Anime.objects.get(id=anime_id)
-    except Anime.DoesNotExist:
-        return Response({"error": "Anime not found"}, status=status.HTTP_404_NOT_FOUND)
-
-    try:
-        user_anime = UserAnimeFavorites.objects.get(idUsuario_id=user_id, idAnime=anime)
-        user_anime.is_favorite = False
-        user_anime.save()
+        favorite = UserAnimeFavorites.objects.get(idUsuario_id=user_id, idAnime_id=anime_id)
+        favorite.delete()
+        return Response({"success": "Anime removed from favorites"}, status=status.HTTP_200_OK)
     except UserAnimeFavorites.DoesNotExist:
         return Response({"error": "Favorite entry not found"}, status=status.HTTP_404_NOT_FOUND)
 
-    serializer = UserAnimeFavoritesSerializer(user_anime)
-    return Response(serializer.data, status=status.HTTP_200_OK)
 @api_view(['GET'])
 def is_user_subscribed(request):
     user_id = request.query_params.get('userId')
@@ -185,7 +217,7 @@ def is_user_subscribed(request):
         return Response({"isSubscribed": user_subscription}, status=status.HTTP_200_OK)
     except Exception as e:
         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-    
+
 @api_view(['POST'])
 def purchase_subscription(request, subscription_id):
     user_id = request.data.get('user_id')
@@ -202,59 +234,8 @@ def purchase_subscription(request, subscription_id):
         idUser=user,
         idSubscription=subscription,
         subscriptionDate=datetime.now(),
-        terminationDate=datetime.now() + timedelta(days=30),  # Suscripción válida por 30 días
+        terminationDate=datetime.now() + timedelta(days=30),
         activeStatus=True
     )
 
-    return Response({"success": "Subscription purchased successfully"}, status=status.HTTP_200_OK)   
-class AnimeListView(generics.ListAPIView):
-    queryset = Anime.objects.all()
-    serializer_class = AnimePublicSerializer
-
-class CategoryViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated, IsAdminUser]
-    queryset = Category.objects.all()
-    serializer_class = CategorySerializer
-
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-    
-class CategoryPrivViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticatedOrReadOnly]
-    queryset = Category.objects.all()
-    serializer_class = CategorySerializer
-
-
-class AnimeCategoriesViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated, IsAdminUser]
-    queryset = AnimeCategories.objects.all()
-    serializer_class = AnimeCategoriesSerializer
-
-class SubscriptionViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated, IsAdminUser]
-    queryset = Subscription.objects.all()
-    serializer_class = SubscriptionSerializer
-
-class SubscriptionPrivViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticatedOrReadOnly]
-    queryset = Subscription.objects.all()
-    serializer_class = SubscriptionSerializer
-
-class UserSubscriptionViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated, IsAdminUser]
-    queryset = UserSubscription.objects.all()
-    serializer_class = UserSubscriptionSerializer
-
-class UserProfileView(generics.RetrieveAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserDetailSerializer
-
-    def get_object(self):
-        return self.request.user
-
-
-
+    return Response({"success": "Subscription purchased successfully"}, status=status.HTTP_200_OK)

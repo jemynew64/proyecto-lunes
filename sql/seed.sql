@@ -41,4 +41,10 @@ INSERT INTO Category (name) VALUES
 ('Psicológico'),
 ('Suspense');
 
+INSERT INTO Subscription (name, price, typeSubscription) VALUES 
+('Iron', 150.00, 'Basic'),
+('Silver', 225.00, 'Standard'),
+('Gold', 300.00, 'Premium');
+
+
 VITE_API_URL="http://127.0.0.1:8000/api/"

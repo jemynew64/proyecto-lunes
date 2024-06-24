@@ -1,12 +1,15 @@
 # tienda/urls.py
 
 from django.urls import path, include
-from .views import login,register
 from rest_framework.routers import DefaultRouter
 from .views import (
     UserViewSet, AnimeViewSet, UserAnimeFavoritesViewSet, 
-    AnimeCategoriesViewSet, CategoryViewSet, AnimePriUserViewset,SubscriptionViewSet, add_to_favorites, 
-    remove_from_favorites, login, register, purchase_subscription, is_user_subscribed, UserProfileView)
+    AnimeCategoriesViewSet, CategoryViewSet, CategoryPrivViewSet, 
+    AnimePriUserViewset, SubscriptionViewSet, SubscriptionPrivViewSet,
+    UserSubscriptionViewSet, UserSubscriptionPrivViewSet,
+    add_to_favorites, remove_from_favorites, login, register, 
+    purchase_subscription, is_user_subscribed, UserProfileView
+)
 
 router = DefaultRouter()
 router.register(r'users', UserViewSet)
@@ -14,8 +17,13 @@ router.register(r'anime', AnimeViewSet, basename="anime")
 router.register(r'useranimefavorites', UserAnimeFavoritesViewSet, basename="useranimefavorites")
 router.register(r'animecategories', AnimeCategoriesViewSet, basename="animecategories")
 router.register(r'category', CategoryViewSet, basename="category")
+router.register(r'category-priv', CategoryPrivViewSet, basename="category-priv")
 router.register(r'anime-public', AnimePriUserViewset, basename="anime-public")
 router.register(r'subscriptions', SubscriptionViewSet, basename="subscriptions")
+router.register(r'subscription-priv', SubscriptionPrivViewSet, basename="subscription-priv")
+router.register(r'usersubscription', UserSubscriptionViewSet, basename="usersubscription")
+router.register(r'usersubscription-priv', UserSubscriptionPrivViewSet, basename="usersubscription-priv")
+
 urlpatterns = [
     path('login', login, name='login'),
     path('register', register, name='register'),
